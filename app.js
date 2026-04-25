@@ -10,8 +10,8 @@ let activeTur = 'gider';
 let pieChart = null, barChart = null, yatirimChart = null;
 
 const CATS = {
-  gider: ['Market','Faturalar','Kira','Ulaşım','Sağlık','Eğlence','Restoran','Giyim','Eğitim','Abonelik','Diğer'],
-  gelir: ['Maaş','Freelance / Serbest','Kira Geliri','Temettü','Hediye','Diğer'],
+  gider: ['Market','Faturalar','Kira','Ulaşım','Sağlık','Eğlence','Restoran','Giyim','Eğitim','Abonelik','Akaryakıt','Araba Giderleri','Diğer'],
+  gelir: ['Maaş','Ek Ödeme','Promosyon','Temettü','Yatırım','Kredi','Nakit Avans','Diğer'],
   yatirim: ['Hisse Senedi','Kripto Para','Altın','Yatırım Fonu','Döviz','Gayrimenkul','Diğer']
 };
 
