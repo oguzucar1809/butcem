@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Finansal Takip</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="noise"></div>
+
+<div class="app-shell">
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <span class="logo-icon">₺</span>
+        <span class="logo-text">Finans<br><em>Takip</em></span>
+      </div>
+      <button class="sidebar-close" id="sidebarClose" onclick="closeSidebar()">×</button>
+    </div>
+
+    <nav class="nav">
+      <button class="nav-item active" data-tab="ozet" onclick="switchTab('ozet', this)">
+        <span class="nav-icon">◈</span> Özet
+      </button>
+      <button class="nav-item" data-tab="ekle" onclick="switchTab('ekle', this)">
+        <span class="nav-icon">+</span> İşlem Ekle
+      </button>
+      <button class="nav-item" data-tab="islemler" onclick="switchTab('islemler', this)">
+        <span class="nav-icon">≡</span> İşlemler
+      </button>
+      <button class="nav-item" data-tab="yatirimlar" onclick="switchTab('yatirimlar', this)">
+        <span class="nav-icon">◎</span> Yatırımlar
+      </button>
+      <button class="nav-item" data-tab="analiz" onclick="switchTab('analiz', this)">
+        <span class="nav-icon">✦</span> YZ Analiz
+      </button>
+      <button class="nav-item" data-tab="ayarlar" onclick="switchTab('ayarlar', this)">
+        <span class="nav-icon">⚙</span> Ayarlar
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="version-tag">v1.0 · Kişisel</div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <header class="topbar">
+      <button class="menu-btn" onclick="openSidebar()">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="topbar-title" id="topbar-title">Özet</div>
+      <div class="topbar-date" id="topbar-date"></div>
+    </header>
+
+    <!-- ÖZET -->
+    <section class="page active" id="page-ozet">
+      <div class="page-header">
+        <h1 class="page-title">Finansal Özet</h1>
+        <select class="month-picker" id="ozet-month" onchange="renderOzet()"></select>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi kpi-gelir">
+          <div class="kpi-label">Toplam Gelir</div>
+          <div class="kpi-value" id="k-gelir">₺0</div>
+          <div class="kpi-sub" id="k-gelir-sub">0 işlem</div>
+        </div>
+        <div class="kpi kpi-gider">
+          <div class="kpi-label">Toplam Gider</div>
+          <div class="kpi-value" id="k-gider">₺0</div>
+          <div class="kpi-sub" id="k-gider-sub">0 işlem</div>
+        </div>
+        <div class="kpi kpi-yatirim">
+          <div class="kpi-label">Yatırımlar</div>
+          <div class="kpi-value" id="k-yatirim">₺0</div>
+          <div class="kpi-sub" id="k-yatirim-sub">0 işlem</div>
+        </div>
+        <div class="kpi kpi-bakiye">
+          <div class="kpi-label">Net Bakiye</div>
+          <div class="kpi-value" id="k-bakiye">₺0</div>
+          <div class="kpi-sub" id="k-tasarruf">%0 tasarruf</div>
+        </div>
+      </div>
+
+      <div class="charts-row">
+        <div class="chart-card">
+          <div class="chart-card-title">Gider Dağılımı</div>
+          <div class="chart-wrap"><canvas id="pieChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-card-title">Gelir vs Gider</div>
+          <div class="chart-wrap"><canvas id="barChart"></canvas></div>
+        </div>
+      </div>
+
+      <div class="section-title">Kategori Breakdown</div>
+      <div class="cat-bars" id="cat-bars"></div>
+
+      <div class="section-title">Son İşlemler</div>
+      <div class="tx-list" id="son-islemler"></div>
+    </section>
+
+    <!-- EKLE -->
+    <section class="page" id="page-ekle">
+      <div class="page-header">
+        <h1 class="page-title">İşlem Ekle</h1>
+      </div>
+
+      <div class="tur-selector">
+        <button class="tur-btn active" data-tur="gider" onclick="setTur('gider', this)">
+          <span>↓</span> Gider
+        </button>
+        <button class="tur-btn" data-tur="gelir" onclick="setTur('gelir', this)">
+          <span>↑</span> Gelir
+        </button>
+        <button class="tur-btn" data-tur="yatirim" onclick="setTur('yatirim', this)">
+          <span>◎</span> Yatırım
+        </button>
+      </div>
+
+      <div class="form-card">
+        <div class="form-group">
+          <label>Açıklama</label>
+          <input id="f-aciklama" type="text" placeholder="Örn: Market alışverişi" autocomplete="off">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Tutar (₺)</label>
+            <input id="f-tutar" type="number" placeholder="0,00" min="0" step="0.01">
+          </div>
+          <div class="form-group">
+            <label>Tarih</label>
+            <input id="f-tarih" type="date">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Kategori</label>
+          <select id="f-kategori"></select>
+        </div>
+        <div class="form-group" id="yatirim-extra" style="display:none">
+          <label>Miktar / Adet (opsiyonel)</label>
+          <input id="f-miktar" type="text" placeholder="Örn: 0.5 BTC, 10 gram, 5 adet">
+        </div>
+        <div class="form-group">
+          <label>Not (opsiyonel)</label>
+          <textarea id="f-not" placeholder="Ek notlar..." rows="2"></textarea>
+        </div>
+        <button class="submit-btn" onclick="ekleIslem()">
+          <span id="submit-icon">+</span> Kaydet
+        </button>
+        <div class="success-msg" id="success-msg">✓ Kaydedildi!</div>
+      </div>
+    </section>
+
+    <!-- İŞLEMLER -->
+    <section class="page" id="page-islemler">
+      <div class="page-header">
+        <h1 class="page-title">Tüm İşlemler</h1>
+      </div>
+
+      <div class="filter-bar">
+        <select class="filter-select" id="tx-month" onchange="renderIslemler()"></select>
+        <div class="filter-btns">
+          <button class="fbtn active" data-f="tümü" onclick="setFilter('tümü', this)">Tümü</button>
+          <button class="fbtn" data-f="gelir" onclick="setFilter('gelir', this)">Gelir</button>
+          <button class="fbtn" data-f="gider" onclick="setFilter('gider', this)">Gider</button>
+          <button class="fbtn" data-f="yatirim" onclick="setFilter('yatirim', this)">Yatırım</button>
+        </div>
+      </div>
+
+      <div class="tx-list" id="tx-list"></div>
+    </section>
+
+    <!-- YATIRIMLAR -->
+    <section class="page" id="page-yatirimlar">
+      <div class="page-header">
+        <h1 class="page-title">Yatırım Portföyü</h1>
+      </div>
+
+      <div class="kpi-grid" style="grid-template-columns:repeat(2,1fr)">
+        <div class="kpi kpi-yatirim">
+          <div class="kpi-label">Toplam Yatırım</div>
+          <div class="kpi-value" id="y-toplam">₺0</div>
+        </div>
+        <div class="kpi kpi-bakiye">
+          <div class="kpi-label">Yatırım Sayısı</div>
+          <div class="kpi-value" id="y-sayi">0</div>
+        </div>
+      </div>
+
+      <div class="chart-card" style="margin-bottom:20px">
+        <div class="chart-card-title">Yatırım Dağılımı</div>
+        <div class="chart-wrap"><canvas id="yatirimChart"></canvas></div>
+      </div>
+
+      <div class="section-title">Yatırım Kayıtları</div>
+      <div class="tx-list" id="yatirim-list"></div>
+    </section>
+
+    <!-- YZ ANALİZ -->
+    <section class="page" id="page-analiz">
+      <div class="page-header">
+        <h1 class="page-title">YZ Analizi</h1>
+        <select class="month-picker" id="analiz-month"></select>
+      </div>
+
+      <div class="ai-panel">
+        <div class="ai-panel-header">
+          <div class="ai-dot"></div>
+          <span>Claude · Finansal Asistan</span>
+        </div>
+        <div class="ai-output" id="ai-output">
+          <p class="ai-placeholder">Yapay zeka analizini başlatmak için aşağıdaki butona tıklayın.<br><br>Claude, seçili ayın tüm gelir ve giderlerini inceleyerek size kişiselleştirilmiş öneriler sunacak.</p>
+        </div>
+        <div class="ai-actions">
+          <button class="ai-btn" onclick="yapaYZAnaliz()">
+            <span id="ai-btn-text">✦ Analiz Başlat</span>
+          </button>
+          <button class="ai-btn ai-btn-sec" onclick="yapaYZSoru()">Soru Sor</button>
+        </div>
+        <div class="ai-question-wrap" id="ai-q-wrap" style="display:none">
+          <input id="ai-question" type="text" placeholder="Harcamalarım hakkında soru sor...">
+          <button onclick="gonderSoru()">Gönder</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- AYARLAR -->
+    <section class="page" id="page-ayarlar">
+      <div class="page-header">
+        <h1 class="page-title">Ayarlar</h1>
+      </div>
+
+      <div class="settings-card">
+        <div class="settings-title">Claude API Anahtarı</div>
+        <p class="settings-desc">YZ Analiz özelliğini kullanmak için bir Anthropic API anahtarı gereklidir. Ücretsiz edinmek için <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> adresine gidin.</p>
+        <div class="form-group">
+          <label>API Anahtarı</label>
+          <input id="api-key-input" type="password" placeholder="sk-ant-...">
+        </div>
+        <button class="submit-btn" onclick="saveApiKey()">Kaydet</button>
+        <div class="success-msg" id="api-success">✓ API anahtarı kaydedildi</div>
+      </div>
+
+      <div class="settings-card">
+        <div class="settings-title">Bütçe Limitleri</div>
+        <p class="settings-desc">Aylık harcama limitlerini belirleyin.</p>
+        <div id="budget-inputs"></div>
+        <button class="submit-btn" onclick="saveBudgets()">Limitleri Kaydet</button>
+        <div class="success-msg" id="budget-success">✓ Kaydedildi</div>
+      </div>
+
+      <div class="settings-card danger-card">
+        <div class="settings-title">Veri Yönetimi</div>
+        <div class="danger-btns">
+          <button class="danger-btn outline" onclick="exportData()">↓ Verileri İndir (JSON)</button>
+          <button class="danger-btn outline" onclick="importData()">↑ Verileri Yükle</button>
+          <input type="file" id="import-input" accept=".json" style="display:none" onchange="handleImport(event)">
+          <button class="danger-btn" onclick="clearAll()">⚠ Tüm Verileri Sil</button>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
