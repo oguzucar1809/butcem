@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yatırım Portföyü</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="yatirimlar.css">
+</head>
+<body>
+<div class="noise"></div>
+<div class="app-shell">
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo"><span class="logo-icon">₺</span><span class="logo-text">Finans<br><em>Takip</em></span></div>
+      <button class="sidebar-close" onclick="closeSidebar()">×</button>
+    </div>
+    <nav class="nav">
+      <button class="nav-item" onclick="window.location='index.html'">          <span class="nav-icon">◈</span> Özet</button>
+      <button class="nav-item" onclick="window.location='index.html'">          <span class="nav-icon">🏦</span> Hesaplar</button>
+      <button class="nav-item" onclick="window.location='index.html'">          <span class="nav-icon">+</span> İşlem Ekle</button>
+      <button class="nav-item" onclick="window.location='index.html'">          <span class="nav-icon">⇄</span> Virman</button>
+      <button class="nav-item" onclick="window.location='index.html'">          <span class="nav-icon">≡</span> İşlemler</button>
+      <button class="nav-item active">                                           <span class="nav-icon">📊</span> Yatırımlar</button>
+      <button class="nav-item" onclick="window.location='index.html'">          <span class="nav-icon">✦</span> YZ Analiz</button>
+      <button class="nav-item" onclick="window.location='index.html'">          <span class="nav-icon">⚙</span> Ayarlar</button>
+    </nav>
+    <div class="sidebar-footer"><div class="version-tag">v2.1 · Kişisel</div></div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <button class="menu-btn" onclick="openSidebar()"><span></span><span></span><span></span></button>
+      <div class="topbar-title">Yatırım Portföyü</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="price-update-info" id="price-update-info">Fiyatlar güncellenmedi</div>
+        <button class="refresh-btn" onclick="fiyatlariGuncelle()" id="refresh-btn" title="Fiyatları Güncelle">↻ Güncelle</button>
+      </div>
+    </header>
+
+    <div style="padding:24px 24px 0">
+      <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr)">
+        <div class="kpi kpi-yatirim">
+          <div class="kpi-label">Toplam Maliyet</div>
+          <div class="kpi-value" id="kpi-maliyet">₺0</div>
+          <div class="kpi-sub">Alış bazında</div>
+        </div>
+        <div class="kpi kpi-gelir">
+          <div class="kpi-label">Güncel Değer</div>
+          <div class="kpi-value" id="kpi-deger">₺0</div>
+          <div class="kpi-sub">Piyasa değeri</div>
+        </div>
+        <div class="kpi" id="kpi-kar-kart">
+          <div class="kpi-label">Toplam Kar / Zarar</div>
+          <div class="kpi-value" id="kpi-kar">₺0</div>
+          <div class="kpi-sub" id="kpi-kar-pct">%0,00</div>
+        </div>
+        <div class="kpi kpi-bakiye">
+          <div class="kpi-label">Açık Pozisyon</div>
+          <div class="kpi-value" id="kpi-acik">0</div>
+          <div class="kpi-sub" id="kpi-kapali-text">0 kapalı</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="padding:16px 24px 0">
+      <div class="ytab-row">
+        <button class="ytab active" onclick="switchYTab('portfoy',this)">📊 Portföy</button>
+        <button class="ytab" onclick="switchYTab('islemler',this)">📋 İşlemler</button>
+        <button class="ytab" onclick="switchYTab('kapali',this)">✓ Kapalı</button>
+        <button class="ytab" onclick="switchYTab('dagilim',this)">🥧 Dağılım</button>
+      </div>
+    </div>
+
+    <!-- PORTFÖY -->
+    <div class="ypanel active" id="ypanel-portfoy" style="padding:16px 24px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+        <div class="filter-btns" style="flex-wrap:wrap">
+          <button class="fbtn active" onclick="setYFilter('tümü',this)">Tümü</button>
+          <button class="fbtn" onclick="setYFilter('hisse',this)">Hisse</button>
+          <button class="fbtn" onclick="setYFilter('fon',this)">Fon</button>
+          <button class="fbtn" onclick="setYFilter('kripto',this)">Kripto</button>
+          <button class="fbtn" onclick="setYFilter('altin',this)">Altın</button>
+          <button class="fbtn" onclick="setYFilter('etf',this)">ETF</button>
+          <button class="fbtn" onclick="setYFilter('mevduat',this)">Mevduat</button>
+          <button class="fbtn" onclick="setYFilter('doviz',this)">Döviz</button>
+        </div>
+        <button class="add-btn" onclick="showPozisyonModal()">+ Pozisyon Ekle</button>
+      </div>
+      <div class="pozisyon-grid" id="pozisyon-grid"></div>
+    </div>
+
+    <!-- İŞLEMLER -->
+    <div class="ypanel" id="ypanel-islemler" style="padding:16px 24px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+        <div class="filter-btns">
+          <button class="fbtn active" onclick="setIslemFilter('tümü',this)">Tümü</button>
+          <button class="fbtn" onclick="setIslemFilter('alis',this)">Alış</button>
+          <button class="fbtn" onclick="setIslemFilter('satis',this)">Satış</button>
+        </div>
+        <button class="add-btn" onclick="showIslemModal()">+ İşlem Ekle</button>
+      </div>
+      <div id="islem-list"></div>
+    </div>
+
+    <!-- KAPALI -->
+    <div class="ypanel" id="ypanel-kapali" style="padding:16px 24px">
+      <div class="kpi-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:16px">
+        <div class="kpi kpi-gelir"><div class="kpi-label">Realize Kar</div><div class="kpi-value" id="realize-kar">₺0</div></div>
+        <div class="kpi kpi-gider"><div class="kpi-label">Realize Zarar</div><div class="kpi-value" id="realize-zarar">₺0</div></div>
+        <div class="kpi kpi-bakiye"><div class="kpi-label">Net Realize</div><div class="kpi-value" id="realize-net">₺0</div></div>
+      </div>
+      <div id="kapali-list"></div>
+    </div>
+
+    <!-- DAĞILIM -->
+    <div class="ypanel" id="ypanel-dagilim" style="padding:16px 24px">
+      <div class="charts-row">
+        <div class="chart-card"><div class="chart-card-title">Kategori Dağılımı</div><div class="chart-wrap"><canvas id="katChart"></canvas></div></div>
+        <div class="chart-card"><div class="chart-card-title">Varlık Bazlı Dağılım</div><div class="chart-wrap"><canvas id="varlikChart"></canvas></div></div>
+      </div>
+      <div id="dagilim-bars"></div>
+    </div>
+  </main>
+</div>
+
+<!-- POZİSYON MODAL -->
+<div class="modal-bg" id="pozisyon-modal" onclick="closePozisyonModal(event)">
+  <div class="modal" style="max-width:500px">
+    <div class="modal-title" id="poz-modal-title">Pozisyon Ekle</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Varlık Türü</label>
+        <select id="p-tur" onchange="turDegisti()">
+          <option value="hisse">📈 Hisse Senedi</option>
+          <option value="fon">📦 Yatırım Fonu</option>
+          <option value="etf">🗂️ ETF</option>
+          <option value="kripto">🪙 Kripto Para</option>
+          <option value="altin">🥇 Altın</option>
+          <option value="mevduat">🏛️ Mevduat / TL</option>
+          <option value="doviz">💱 Döviz</option>
+          <option value="diger">📌 Diğer</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Yatırım Hesabı</label>
+        <select id="p-hesap"></select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Varlık Adı</label>
+      <input id="p-ad" type="text" placeholder="Örn: Türk Hava Yolları, Bitcoin, Gram Altın">
+    </div>
+    <div class="form-group" id="ticker-group">
+      <label>Ticker Sembolü <span style="color:var(--text3);font-weight:400">(otomatik fiyat için)</span></label>
+      <input id="p-ticker" type="text" placeholder="Örn: THYAO.IS  |  BTC-USD  |  GC=F  |  USDTRY=X">
+      <div class="ticker-aciklama">
+        BIST hisse: THYAO.IS &nbsp;·&nbsp; Kripto: BTC-USD, ETH-USD &nbsp;·&nbsp; Altın: GC=F &nbsp;·&nbsp; USD/TRY: USDTRY=X &nbsp;·&nbsp; EUR/TRY: EURTRY=X
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label id="miktar-label">Miktar / Adet</label>
+        <input id="p-miktar" type="number" placeholder="0" min="0" step="any">
+      </div>
+      <div class="form-group">
+        <label>Ortalama Alış Fiyatı</label>
+        <input id="p-alis" type="number" placeholder="0,00" min="0" step="any">
+      </div>
+    </div>
+    <div id="mevduat-fields" style="display:none">
+      <div class="kredi-divider">🏛️ Mevduat Detayları</div>
+      <div class="form-row">
+        <div class="form-group"><label>Yıllık Faiz (%)</label><input id="p-faiz" type="number" placeholder="45" min="0" step="0.01"></div>
+        <div class="form-group"><label>Vade Tarihi</label><input id="p-vade" type="date"></div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Manuel Güncel Fiyat <span style="color:var(--text3)">(ticker yoksa)</span></label>
+        <input id="p-guncel" type="number" placeholder="Boş = alış fiyatı" min="0" step="any">
+      </div>
+      <div class="form-group">
+        <label>Para Birimi</label>
+        <select id="p-para">
+          <option value="TRY">₺ TRY</option>
+          <option value="USD">$ USD</option>
+          <option value="EUR">€ EUR</option>
+          <option value="GBP">£ GBP</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Alış Tarihi</label><input id="p-tarih" type="date"></div>
+      <div class="form-group"><label>Hedef Fiyat (opsiyonel)</label><input id="p-hedef" type="number" placeholder="0,00" min="0" step="any"></div>
+    </div>
+    <div class="form-group"><label>Not</label><textarea id="p-not" rows="2" placeholder="Strateji notları..."></textarea></div>
+    <input type="hidden" id="p-edit-id">
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button class="submit-btn" onclick="kaydetPozisyon()">Kaydet</button>
+      <button class="submit-btn" style="background:var(--bg4);color:var(--text2)" onclick="closePozisyonModal()">İptal</button>
+    </div>
+  </div>
+</div>
+
+<!-- İŞLEM EKLE MODAL -->
+<div class="modal-bg" id="islem-modal-yat" onclick="closeIslemModal(event)">
+  <div class="modal" style="max-width:440px">
+    <div class="modal-title">Alım / Satım İşlemi</div>
+    <div class="tur-selector" style="margin-bottom:16px">
+      <button class="tur-btn active" data-tip="alis"  id="itip-alis"  onclick="setIslemTip('alis',this)">↓ Alış</button>
+      <button class="tur-btn"        data-tip="satis" id="itip-satis" onclick="setIslemTip('satis',this)">↑ Satış</button>
+    </div>
+    <div class="form-group"><label>Pozisyon</label><select id="i-pozisyon"></select></div>
+    <div class="form-row">
+      <div class="form-group"><label>Miktar / Adet</label><input id="i-miktar" type="number" placeholder="0" min="0" step="any"></div>
+      <div class="form-group"><label>Fiyat</label><input id="i-fiyat" type="number" placeholder="0,00" min="0" step="any"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Tarih</label><input id="i-tarih" type="date"></div>
+      <div class="form-group"><label>Komisyon (opsiyonel)</label><input id="i-komisyon" type="number" placeholder="0" min="0" step="0.01"></div>
+    </div>
+    <div class="form-group"><label>Not</label><input id="i-not" type="text" placeholder="Opsiyonel..."></div>
+    <input type="hidden" id="i-edit-id">
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button class="submit-btn" onclick="kaydetIslem()">Kaydet</button>
+      <button class="submit-btn" style="background:var(--bg4);color:var(--text2)" onclick="closeIslemModal()">İptal</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+<script src="yatirimlar.js"></script>
+</body>
+</html>

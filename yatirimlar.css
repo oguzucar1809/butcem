@@ -1,0 +1,285 @@
+/* =============================================
+   YATIRIMLAR.CSS — Yatırım Portföyü Stilleri
+   ============================================= */
+
+/* ── TAB ROW ── */
+.ytab-row {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0;
+  overflow-x: auto;
+}
+.ytab {
+  padding: 9px 18px;
+  border: none;
+  background: transparent;
+  color: var(--text2);
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  white-space: nowrap;
+  transition: all .15s;
+}
+.ytab:hover { color: var(--text); }
+.ytab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* ── PANEL ── */
+.ypanel { display: none; }
+.ypanel.active { display: block; }
+
+/* ── TOPBAR EXTRAS ── */
+.price-update-info {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text3);
+}
+.refresh-btn {
+  padding: 6px 12px;
+  background: var(--accent-dim);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  color: var(--accent);
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .15s;
+}
+.refresh-btn:hover { background: var(--accent); color: #000; }
+.refresh-btn.loading { opacity: .6; cursor: wait; animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── POZİSYON GRID ── */
+.pozisyon-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+.poz-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  position: relative;
+  transition: border-color .15s;
+  overflow: hidden;
+}
+.poz-card:hover { border-color: var(--border2); }
+.poz-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+}
+.poz-card.kar::before  { background: var(--gelir); }
+.poz-card.zarar::before { background: var(--gider); }
+.poz-card.notr::before  { background: var(--border2); }
+
+.poz-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.poz-icon {
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+  background: var(--bg3);
+}
+.poz-title { flex: 1; min-width: 0; }
+.poz-ad {
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.poz-ticker {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text3);
+  margin-top: 1px;
+}
+.poz-actions {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.poz-btn {
+  background: none;
+  border: none;
+  color: var(--text3);
+  cursor: pointer;
+  font-size: 13px;
+  padding: 3px 6px;
+  border-radius: 4px;
+  transition: all .15s;
+}
+.poz-btn:hover { background: var(--bg3); color: var(--text); }
+
+.poz-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.poz-stat { }
+.poz-stat-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 2px;
+}
+.poz-stat-value {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+}
+.poz-stat-value.kar   { color: var(--gelir); }
+.poz-stat-value.zarar { color: var(--gider); }
+
+.poz-kar-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  border-radius: var(--radius);
+  margin-top: 4px;
+}
+.poz-kar-row.kar   { background: var(--gelir-dim); }
+.poz-kar-row.zarar { background: var(--gider-dim); }
+.poz-kar-row.notr  { background: var(--bg3); }
+.poz-kar-label { font-size: 11px; color: var(--text2); }
+.poz-kar-val   { font-family: var(--font-mono); font-size: 14px; font-weight: 600; }
+.poz-kar-val.kar   { color: var(--gelir); }
+.poz-kar-val.zarar { color: var(--gider); }
+.poz-kar-pct   { font-family: var(--font-mono); font-size: 12px; }
+
+/* Hedef fiyat çubuğu */
+.poz-hedef-bar {
+  margin-top: 8px;
+}
+.poz-hedef-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--text3);
+  margin-bottom: 3px;
+  font-family: var(--font-mono);
+}
+.poz-hedef-track {
+  height: 3px;
+  background: var(--bg4);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.poz-hedef-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: var(--accent);
+  transition: width .5s ease;
+}
+
+/* Mevduat özel */
+.poz-vade-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-family: var(--font-mono);
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: var(--yatirim-dim);
+  color: var(--yatirim);
+  margin-top: 4px;
+}
+.poz-vade-badge.acil { background: var(--gider-dim); color: var(--gider); }
+
+/* Fiyat güncelleme durumu */
+.poz-price-status {
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: var(--text3);
+  margin-top: 6px;
+  text-align: right;
+}
+.poz-price-status.live { color: var(--gelir); }
+.poz-price-status.stale { color: var(--accent); }
+
+/* ── İŞLEM LİSTESİ ── */
+.islem-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  margin-bottom: 6px;
+  transition: border-color .15s;
+}
+.islem-item:hover { border-color: var(--border2); }
+.islem-tip-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+}
+.islem-tip-badge.alis  { background: var(--gelir-dim);   color: var(--gelir); }
+.islem-tip-badge.satis { background: var(--gider-dim);   color: var(--gider); }
+.islem-info { flex: 1; min-width: 0; }
+.islem-poz  { font-size: 13px; font-weight: 600; }
+.islem-meta { font-size: 11px; color: var(--text3); font-family: var(--font-mono); margin-top: 2px; }
+.islem-tutar { font-family: var(--font-mono); font-size: 13px; font-weight: 500; flex-shrink: 0; text-align: right; }
+.islem-tutar .kar   { color: var(--gelir); }
+.islem-tutar .zarar { color: var(--gider); }
+
+/* ── TICKER AÇIKLAMA ── */
+.ticker-aciklama {
+  font-size: 10px;
+  color: var(--text3);
+  font-family: var(--font-mono);
+  margin-top: 4px;
+  line-height: 1.6;
+}
+
+/* ── DAĞILIM BARS ── */
+.dagilim-bar-row { margin-bottom: 10px; }
+.dagilim-bar-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text2);
+  margin-bottom: 4px;
+}
+.dagilim-bar-label span:last-child { font-family: var(--font-mono); color: var(--text); }
+
+/* ── EMPTY STATE ── */
+.poz-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 48px 20px;
+  color: var(--text3);
+  font-size: 13px;
+  font-family: var(--font-mono);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .pozisyon-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+}
+@media (max-width: 600px) {
+  .pozisyon-grid { grid-template-columns: 1fr; }
+  .ytab { padding: 8px 12px; font-size: 12px; }
+}
