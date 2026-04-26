@@ -248,3 +248,77 @@ body { background:var(--bg); color:var(--text); font-family:var(--font-display);
   .kpi-value { font-size:16px; }
   .hesap-grid { grid-template-columns:1fr; }
 }
+
+/* ── İŞLEM DÜZENLEME BUTONU ── */
+.tx-edit {
+  background: none;
+  border: none;
+  color: var(--text3);
+  cursor: pointer;
+  font-size: 15px;
+  padding: 2px 6px;
+  line-height: 1;
+  border-radius: 4px;
+  transition: all .15s;
+  flex-shrink: 0;
+}
+.tx-edit:hover { color: var(--accent); background: var(--accent-dim); }
+
+/* ── KREDİ KARTI DETAYLARI ── */
+.kredi-divider {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  color: var(--yatirim);
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+  margin: 4px 0 12px;
+}
+
+.kredi-info {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.kredi-limit-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text2);
+  margin-bottom: 5px;
+  font-family: var(--font-mono);
+}
+
+.kredi-bar-track {
+  height: 5px;
+  background: var(--bg4);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 2px;
+}
+
+.kredi-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width .5s ease;
+}
+
+.kredi-tarih {
+  font-size: 11px;
+  color: var(--text3);
+  margin-top: 6px;
+  line-height: 1.5;
+}
+.kredi-tarih b { color: var(--text2); }
+
+.kredi-tarih-acil {
+  color: var(--gider) !important;
+  font-weight: 500;
+}
+
+/* ── MODAL SCROLL (uzun içerik için) ── */
+.modal {
+  max-height: 90vh;
+  overflow-y: auto;
+}
