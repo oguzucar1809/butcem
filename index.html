@@ -32,7 +32,7 @@
       <button class="nav-item"        data-tab="analiz"   onclick="switchTab('analiz',this)">  <span class="nav-icon">✦</span> YZ Analiz</button>
       <button class="nav-item"        data-tab="ayarlar"  onclick="switchTab('ayarlar',this)"> <span class="nav-icon">⚙</span> Ayarlar</button>
     </nav>
-    <div class="sidebar-footer"><div class="version-tag">v2.0 · Kişisel</div></div>
+    <div class="sidebar-footer"><div class="version-tag">v2.1 · Kişisel</div></div>
   </aside>
 
   <main class="main">
@@ -51,22 +51,22 @@
       <div class="kpi-grid">
         <div class="kpi kpi-gelir">
           <div class="kpi-label">Toplam Gelir</div>
-          <div class="kpi-value" id="k-gelir">₺0</div>
+          <div class="kpi-value" id="k-gelir">0</div>
           <div class="kpi-sub"   id="k-gelir-sub">0 işlem</div>
         </div>
         <div class="kpi kpi-gider">
           <div class="kpi-label">Toplam Gider</div>
-          <div class="kpi-value" id="k-gider">₺0</div>
+          <div class="kpi-value" id="k-gider">0</div>
           <div class="kpi-sub"   id="k-gider-sub">0 işlem</div>
         </div>
         <div class="kpi kpi-yatirim">
           <div class="kpi-label">Yatırım Gideri</div>
-          <div class="kpi-value" id="k-yatirim">₺0</div>
+          <div class="kpi-value" id="k-yatirim">0</div>
           <div class="kpi-sub"   id="k-yatirim-sub">0 işlem</div>
         </div>
         <div class="kpi kpi-bakiye">
           <div class="kpi-label">Net Bakiye</div>
-          <div class="kpi-value" id="k-bakiye">₺0</div>
+          <div class="kpi-value" id="k-bakiye">0</div>
           <div class="kpi-sub"   id="k-tasarruf">%0 tasarruf</div>
         </div>
       </div>
@@ -104,39 +104,6 @@
       <div class="tx-list" id="hesap-tx-list"></div>
     </section>
 
-    <!-- Hesap Modal -->
-    <div class="modal-bg" id="hesap-modal" onclick="closeHesapModal(event)">
-      <div class="modal">
-        <div class="modal-title" id="modal-title">Hesap Ekle</div>
-        <div class="form-group">
-          <label>Hesap Adı</label>
-          <input id="h-ad" type="text" placeholder="Örn: Ziraat Bankası">
-        </div>
-        <div class="form-group">
-          <label>Hesap Türü</label>
-          <select id="h-tur">
-            <option value="banka">🏦 Banka Hesabı</option>
-            <option value="kredi">💳 Kredi Kartı</option>
-            <option value="nakit">💵 Nakit</option>
-            <option value="yatirim">📈 Yatırım Hesabı</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Başlangıç Bakiyesi (₺)</label>
-          <input id="h-bakiye" type="number" placeholder="0" step="0.01">
-        </div>
-        <div class="form-group">
-          <label>Renk</label>
-          <div class="color-picker" id="color-picker"></div>
-        </div>
-        <input type="hidden" id="h-edit-id">
-        <div style="display:flex;gap:8px;margin-top:4px">
-          <button class="submit-btn" onclick="kaydetHesap()">Kaydet</button>
-          <button class="submit-btn" style="background:var(--bg4);color:var(--text2)" onclick="closeHesapModal()">İptal</button>
-        </div>
-      </div>
-    </div>
-
     <!-- ════════ İŞLEM EKLE ════════ -->
     <section class="page" id="page-ekle">
       <div class="page-header"><h1 class="page-title">İşlem Ekle</h1></div>
@@ -172,7 +139,7 @@
           <textarea id="f-not" placeholder="Ek notlar..." rows="2"></textarea>
         </div>
         <button class="submit-btn" onclick="ekleIslem()">+ Kaydet</button>
-        <div class="success-msg" id="success-msg">✓ Kaydedildi!</div>
+        <div class="success-msg" id="success-msg">Kaydedildi!</div>
       </div>
     </section>
 
@@ -180,7 +147,7 @@
     <section class="page" id="page-virman">
       <div class="page-header"><h1 class="page-title">Hesaplar Arası Virman</h1></div>
       <div class="form-card">
-        <div class="info-box">ℹ️ Virman yapıldığında kaynak hesaptan çıkış, hedef hesaba giriş otomatik işlenir.</div>
+        <div class="info-box">Virman yapıldığında kaynak hesaptan çıkış, hedef hesaba giriş otomatik işlenir.</div>
         <div class="form-group">
           <label>Kaynak Hesap (Çıkış)</label>
           <select id="v-kaynak"></select>
@@ -205,7 +172,7 @@
           <input id="v-aciklama" type="text" placeholder="Örn: Maaş aktarımı">
         </div>
         <button class="submit-btn" onclick="ekleVirman()">⇄ Virmanı Kaydet</button>
-        <div class="success-msg" id="virman-msg">✓ Virman kaydedildi!</div>
+        <div class="success-msg" id="virman-msg">Virman kaydedildi!</div>
       </div>
       <div class="section-title" style="margin-top:24px">Virman Geçmişi</div>
       <div class="tx-list" id="virman-list"></div>
@@ -262,7 +229,7 @@
           <input id="api-key-input" type="password" placeholder="sk-ant-...">
         </div>
         <button class="submit-btn" onclick="saveApiKey()">Kaydet</button>
-        <div class="success-msg" id="api-success">✓ Kaydedildi</div>
+        <div class="success-msg" id="api-success">Kaydedildi</div>
       </div>
       <div class="settings-card danger-card">
         <div class="settings-title">Veri Yönetimi</div>
@@ -275,6 +242,111 @@
       </div>
     </section>
   </main>
+</div>
+
+<!-- ════════ HESAP MODAL ════════ -->
+<div class="modal-bg" id="hesap-modal" onclick="closeHesapModal(event)">
+  <div class="modal">
+    <div class="modal-title" id="modal-title">Hesap Ekle</div>
+    <div class="form-group">
+      <label>Hesap Adı</label>
+      <input id="h-ad" type="text" placeholder="Örn: Ziraat Bankası">
+    </div>
+    <div class="form-group">
+      <label>Hesap Türü</label>
+      <select id="h-tur" onchange="toggleKrediFields()">
+        <option value="banka">🏦 Banka Hesabı</option>
+        <option value="kredi">💳 Kredi Kartı</option>
+        <option value="nakit">💵 Nakit</option>
+        <option value="yatirim">📈 Yatırım Hesabı</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label id="bakiye-label">Başlangıç Bakiyesi (₺)</label>
+      <input id="h-bakiye" type="number" placeholder="0" step="0.01">
+    </div>
+
+    <!-- Kredi Kartı Alanları -->
+    <div id="kredi-fields" style="display:none">
+      <div class="kredi-divider">💳 Kredi Kartı Detayları</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Kart Limiti (₺)</label>
+          <input id="h-limit" type="number" placeholder="0" step="0.01" min="0">
+        </div>
+        <div class="form-group">
+          <label>Mevcut Borç (₺)</label>
+          <input id="h-borc" type="number" placeholder="0" step="0.01" min="0">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Hesap Kesim Günü</label>
+          <input id="h-kesim" type="number" placeholder="Örn: 15" min="1" max="31">
+        </div>
+        <div class="form-group">
+          <label>Son Ödeme Günü</label>
+          <input id="h-odeme" type="number" placeholder="Örn: 5" min="1" max="31">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Ekstre Tarihi (Gün)</label>
+        <input id="h-ekstre" type="number" placeholder="Hesap kesim+1 gün" min="1" max="31">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Renk</label>
+      <div class="color-picker" id="color-picker"></div>
+    </div>
+    <input type="hidden" id="h-edit-id">
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button class="submit-btn" onclick="kaydetHesap()">Kaydet</button>
+      <button class="submit-btn" style="background:var(--bg4);color:var(--text2)" onclick="closeHesapModal()">İptal</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ İŞLEM DÜZENLEME MODAL ════════ -->
+<div class="modal-bg" id="islem-modal" onclick="closeIslemModal(event)">
+  <div class="modal">
+    <div class="modal-title">İşlemi Düzenle</div>
+    <div class="tur-selector" style="margin-bottom:16px">
+      <button class="tur-btn" data-tur="gider" id="edit-tur-gider" onclick="setEditTur('gider',this)"><span>↓</span> Gider</button>
+      <button class="tur-btn" data-tur="gelir" id="edit-tur-gelir" onclick="setEditTur('gelir',this)"><span>↑</span> Gelir</button>
+    </div>
+    <div class="form-group">
+      <label>Açıklama</label>
+      <input id="edit-aciklama" type="text">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Tutar (₺)</label>
+        <input id="edit-tutar" type="number" min="0" step="0.01">
+      </div>
+      <div class="form-group">
+        <label>Tarih</label>
+        <input id="edit-tarih" type="date">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Hesap</label>
+      <select id="edit-hesap"></select>
+    </div>
+    <div class="form-group">
+      <label>Kategori</label>
+      <select id="edit-kategori"></select>
+    </div>
+    <div class="form-group">
+      <label>Not</label>
+      <textarea id="edit-not" rows="2" placeholder="Opsiyonel..."></textarea>
+    </div>
+    <input type="hidden" id="edit-id">
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button class="submit-btn" onclick="kaydetIslemDuzenle()">✓ Güncelle</button>
+      <button class="submit-btn" style="background:var(--bg4);color:var(--text2)" onclick="closeIslemModal()">İptal</button>
+    </div>
+  </div>
 </div>
 
 <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
