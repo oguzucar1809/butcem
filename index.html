@@ -6,90 +6,72 @@
 <title>Finansal Takip</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="noise"></div>
-
 <div class="app-shell">
-  <!-- Sidebar -->
+
+  <!-- ── SIDEBAR ── -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <div class="logo">
         <span class="logo-icon">₺</span>
         <span class="logo-text">Finans<br><em>Takip</em></span>
       </div>
-      <button class="sidebar-close" id="sidebarClose" onclick="closeSidebar()">×</button>
+      <button class="sidebar-close" onclick="closeSidebar()">×</button>
     </div>
-
     <nav class="nav">
-      <button class="nav-item active" data-tab="ozet" onclick="switchTab('ozet', this)">
-        <span class="nav-icon">◈</span> Özet
-      </button>
-      <button class="nav-item" data-tab="ekle" onclick="switchTab('ekle', this)">
-        <span class="nav-icon">+</span> İşlem Ekle
-      </button>
-      <button class="nav-item" data-tab="islemler" onclick="switchTab('islemler', this)">
-        <span class="nav-icon">≡</span> İşlemler
-      </button>
-      <button class="nav-item" data-tab="yatirimlar" onclick="switchTab('yatirimlar', this)">
-        <span class="nav-icon">◎</span> Yatırımlar
-      </button>
-      <button class="nav-item" data-tab="analiz" onclick="switchTab('analiz', this)">
-        <span class="nav-icon">✦</span> YZ Analiz
-      </button>
-      <button class="nav-item" data-tab="ayarlar" onclick="switchTab('ayarlar', this)">
-        <span class="nav-icon">⚙</span> Ayarlar
-      </button>
+      <button class="nav-item active" data-tab="ozet"     onclick="switchTab('ozet',this)">    <span class="nav-icon">◈</span> Özet</button>
+      <button class="nav-item"        data-tab="hesaplar" onclick="switchTab('hesaplar',this)"><span class="nav-icon">🏦</span> Hesaplar</button>
+      <button class="nav-item"        data-tab="ekle"     onclick="switchTab('ekle',this)">    <span class="nav-icon">+</span> İşlem Ekle</button>
+      <button class="nav-item"        data-tab="virman"   onclick="switchTab('virman',this)">  <span class="nav-icon">⇄</span> Virman</button>
+      <button class="nav-item"        data-tab="islemler" onclick="switchTab('islemler',this)"><span class="nav-icon">≡</span> İşlemler</button>
+      <button class="nav-item"        data-tab="analiz"   onclick="switchTab('analiz',this)">  <span class="nav-icon">✦</span> YZ Analiz</button>
+      <button class="nav-item"        data-tab="ayarlar"  onclick="switchTab('ayarlar',this)"> <span class="nav-icon">⚙</span> Ayarlar</button>
     </nav>
-
-    <div class="sidebar-footer">
-      <div class="version-tag">v1.0 · Kişisel</div>
-    </div>
+    <div class="sidebar-footer"><div class="version-tag">v2.0 · Kişisel</div></div>
   </aside>
 
-  <!-- Main -->
   <main class="main">
     <header class="topbar">
-      <button class="menu-btn" onclick="openSidebar()">
-        <span></span><span></span><span></span>
-      </button>
+      <button class="menu-btn" onclick="openSidebar()"><span></span><span></span><span></span></button>
       <div class="topbar-title" id="topbar-title">Özet</div>
-      <div class="topbar-date" id="topbar-date"></div>
+      <div class="topbar-date"  id="topbar-date"></div>
     </header>
 
-    <!-- ÖZET -->
+    <!-- ════════ ÖZET ════════ -->
     <section class="page active" id="page-ozet">
       <div class="page-header">
         <h1 class="page-title">Finansal Özet</h1>
         <select class="month-picker" id="ozet-month" onchange="renderOzet()"></select>
       </div>
-
       <div class="kpi-grid">
         <div class="kpi kpi-gelir">
           <div class="kpi-label">Toplam Gelir</div>
           <div class="kpi-value" id="k-gelir">₺0</div>
-          <div class="kpi-sub" id="k-gelir-sub">0 işlem</div>
+          <div class="kpi-sub"   id="k-gelir-sub">0 işlem</div>
         </div>
         <div class="kpi kpi-gider">
           <div class="kpi-label">Toplam Gider</div>
           <div class="kpi-value" id="k-gider">₺0</div>
-          <div class="kpi-sub" id="k-gider-sub">0 işlem</div>
+          <div class="kpi-sub"   id="k-gider-sub">0 işlem</div>
         </div>
         <div class="kpi kpi-yatirim">
-          <div class="kpi-label">Yatırımlar</div>
+          <div class="kpi-label">Yatırım Gideri</div>
           <div class="kpi-value" id="k-yatirim">₺0</div>
-          <div class="kpi-sub" id="k-yatirim-sub">0 işlem</div>
+          <div class="kpi-sub"   id="k-yatirim-sub">0 işlem</div>
         </div>
         <div class="kpi kpi-bakiye">
           <div class="kpi-label">Net Bakiye</div>
           <div class="kpi-value" id="k-bakiye">₺0</div>
-          <div class="kpi-sub" id="k-tasarruf">%0 tasarruf</div>
+          <div class="kpi-sub"   id="k-tasarruf">%0 tasarruf</div>
         </div>
       </div>
-
+      <div class="section-title">Hesap Bakiyeleri</div>
+      <div class="hesap-bakiye-list" id="hesap-bakiye-list"></div>
       <div class="charts-row">
         <div class="chart-card">
           <div class="chart-card-title">Gider Dağılımı</div>
@@ -100,36 +82,72 @@
           <div class="chart-wrap"><canvas id="barChart"></canvas></div>
         </div>
       </div>
-
       <div class="section-title">Kategori Breakdown</div>
       <div class="cat-bars" id="cat-bars"></div>
-
       <div class="section-title">Son İşlemler</div>
       <div class="tx-list" id="son-islemler"></div>
     </section>
 
-    <!-- EKLE -->
-    <section class="page" id="page-ekle">
+    <!-- ════════ HESAPLAR ════════ -->
+    <section class="page" id="page-hesaplar">
       <div class="page-header">
-        <h1 class="page-title">İşlem Ekle</h1>
+        <h1 class="page-title">Hesaplar</h1>
+        <button class="add-btn" onclick="showHesapModal()">+ Hesap Ekle</button>
       </div>
+      <div class="hesap-grid" id="hesap-grid"></div>
+      <div class="section-title" style="margin-top:24px">Hesap Bazlı İşlemler</div>
+      <div class="filter-bar">
+        <select class="filter-select" id="hesap-filter" onchange="renderHesapIslemler()">
+          <option value="">Tüm Hesaplar</option>
+        </select>
+      </div>
+      <div class="tx-list" id="hesap-tx-list"></div>
+    </section>
 
+    <!-- Hesap Modal -->
+    <div class="modal-bg" id="hesap-modal" onclick="closeHesapModal(event)">
+      <div class="modal">
+        <div class="modal-title" id="modal-title">Hesap Ekle</div>
+        <div class="form-group">
+          <label>Hesap Adı</label>
+          <input id="h-ad" type="text" placeholder="Örn: Ziraat Bankası">
+        </div>
+        <div class="form-group">
+          <label>Hesap Türü</label>
+          <select id="h-tur">
+            <option value="banka">🏦 Banka Hesabı</option>
+            <option value="kredi">💳 Kredi Kartı</option>
+            <option value="nakit">💵 Nakit</option>
+            <option value="yatirim">📈 Yatırım Hesabı</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Başlangıç Bakiyesi (₺)</label>
+          <input id="h-bakiye" type="number" placeholder="0" step="0.01">
+        </div>
+        <div class="form-group">
+          <label>Renk</label>
+          <div class="color-picker" id="color-picker"></div>
+        </div>
+        <input type="hidden" id="h-edit-id">
+        <div style="display:flex;gap:8px;margin-top:4px">
+          <button class="submit-btn" onclick="kaydetHesap()">Kaydet</button>
+          <button class="submit-btn" style="background:var(--bg4);color:var(--text2)" onclick="closeHesapModal()">İptal</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════ İŞLEM EKLE ════════ -->
+    <section class="page" id="page-ekle">
+      <div class="page-header"><h1 class="page-title">İşlem Ekle</h1></div>
       <div class="tur-selector">
-        <button class="tur-btn active" data-tur="gider" onclick="setTur('gider', this)">
-          <span>↓</span> Gider
-        </button>
-        <button class="tur-btn" data-tur="gelir" onclick="setTur('gelir', this)">
-          <span>↑</span> Gelir
-        </button>
-        <button class="tur-btn" data-tur="yatirim" onclick="setTur('yatirim', this)">
-          <span>◎</span> Yatırım
-        </button>
+        <button class="tur-btn active" data-tur="gider" onclick="setTur('gider',this)"><span>↓</span> Gider</button>
+        <button class="tur-btn"        data-tur="gelir" onclick="setTur('gelir',this)"><span>↑</span> Gelir</button>
       </div>
-
       <div class="form-card">
         <div class="form-group">
           <label>Açıklama</label>
-          <input id="f-aciklama" type="text" placeholder="Örn: Market alışverişi" autocomplete="off">
+          <input id="f-aciklama" type="text" placeholder="Örn: Şubat maaşı" autocomplete="off">
         </div>
         <div class="form-row">
           <div class="form-group">
@@ -142,88 +160,88 @@
           </div>
         </div>
         <div class="form-group">
+          <label id="hesap-label">Hesap</label>
+          <select id="f-hesap"></select>
+        </div>
+        <div class="form-group">
           <label>Kategori</label>
           <select id="f-kategori"></select>
-        </div>
-        <div class="form-group" id="yatirim-extra" style="display:none">
-          <label>Miktar / Adet (opsiyonel)</label>
-          <input id="f-miktar" type="text" placeholder="Örn: 0.5 BTC, 10 gram, 5 adet">
         </div>
         <div class="form-group">
           <label>Not (opsiyonel)</label>
           <textarea id="f-not" placeholder="Ek notlar..." rows="2"></textarea>
         </div>
-        <button class="submit-btn" onclick="ekleIslem()">
-          <span id="submit-icon">+</span> Kaydet
-        </button>
+        <button class="submit-btn" onclick="ekleIslem()">+ Kaydet</button>
         <div class="success-msg" id="success-msg">✓ Kaydedildi!</div>
       </div>
     </section>
 
-    <!-- İŞLEMLER -->
-    <section class="page" id="page-islemler">
-      <div class="page-header">
-        <h1 class="page-title">Tüm İşlemler</h1>
+    <!-- ════════ VİRMAN ════════ -->
+    <section class="page" id="page-virman">
+      <div class="page-header"><h1 class="page-title">Hesaplar Arası Virman</h1></div>
+      <div class="form-card">
+        <div class="info-box">ℹ️ Virman yapıldığında kaynak hesaptan çıkış, hedef hesaba giriş otomatik işlenir.</div>
+        <div class="form-group">
+          <label>Kaynak Hesap (Çıkış)</label>
+          <select id="v-kaynak"></select>
+        </div>
+        <div class="transfer-arrow">⇓</div>
+        <div class="form-group">
+          <label>Hedef Hesap (Giriş)</label>
+          <select id="v-hedef"></select>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Tutar (₺)</label>
+            <input id="v-tutar" type="number" placeholder="0,00" min="0" step="0.01">
+          </div>
+          <div class="form-group">
+            <label>Tarih</label>
+            <input id="v-tarih" type="date">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Açıklama (opsiyonel)</label>
+          <input id="v-aciklama" type="text" placeholder="Örn: Maaş aktarımı">
+        </div>
+        <button class="submit-btn" onclick="ekleVirman()">⇄ Virmanı Kaydet</button>
+        <div class="success-msg" id="virman-msg">✓ Virman kaydedildi!</div>
       </div>
+      <div class="section-title" style="margin-top:24px">Virman Geçmişi</div>
+      <div class="tx-list" id="virman-list"></div>
+    </section>
 
+    <!-- ════════ İŞLEMLER ════════ -->
+    <section class="page" id="page-islemler">
+      <div class="page-header"><h1 class="page-title">Tüm İşlemler</h1></div>
       <div class="filter-bar">
         <select class="filter-select" id="tx-month" onchange="renderIslemler()"></select>
+        <select class="filter-select" id="tx-hesap-filter" onchange="renderIslemler()">
+          <option value="">Tüm Hesaplar</option>
+        </select>
         <div class="filter-btns">
-          <button class="fbtn active" data-f="tümü" onclick="setFilter('tümü', this)">Tümü</button>
-          <button class="fbtn" data-f="gelir" onclick="setFilter('gelir', this)">Gelir</button>
-          <button class="fbtn" data-f="gider" onclick="setFilter('gider', this)">Gider</button>
-          <button class="fbtn" data-f="yatirim" onclick="setFilter('yatirim', this)">Yatırım</button>
+          <button class="fbtn active" data-f="tümü"   onclick="setFilter('tümü',this)">Tümü</button>
+          <button class="fbtn"        data-f="gelir"  onclick="setFilter('gelir',this)">Gelir</button>
+          <button class="fbtn"        data-f="gider"  onclick="setFilter('gider',this)">Gider</button>
+          <button class="fbtn"        data-f="virman" onclick="setFilter('virman',this)">Virman</button>
         </div>
       </div>
-
       <div class="tx-list" id="tx-list"></div>
     </section>
 
-    <!-- YATIRIMLAR -->
-    <section class="page" id="page-yatirimlar">
-      <div class="page-header">
-        <h1 class="page-title">Yatırım Portföyü</h1>
-      </div>
-
-      <div class="kpi-grid" style="grid-template-columns:repeat(2,1fr)">
-        <div class="kpi kpi-yatirim">
-          <div class="kpi-label">Toplam Yatırım</div>
-          <div class="kpi-value" id="y-toplam">₺0</div>
-        </div>
-        <div class="kpi kpi-bakiye">
-          <div class="kpi-label">Yatırım Sayısı</div>
-          <div class="kpi-value" id="y-sayi">0</div>
-        </div>
-      </div>
-
-      <div class="chart-card" style="margin-bottom:20px">
-        <div class="chart-card-title">Yatırım Dağılımı</div>
-        <div class="chart-wrap"><canvas id="yatirimChart"></canvas></div>
-      </div>
-
-      <div class="section-title">Yatırım Kayıtları</div>
-      <div class="tx-list" id="yatirim-list"></div>
-    </section>
-
-    <!-- YZ ANALİZ -->
+    <!-- ════════ YZ ANALİZ ════════ -->
     <section class="page" id="page-analiz">
       <div class="page-header">
         <h1 class="page-title">YZ Analizi</h1>
         <select class="month-picker" id="analiz-month"></select>
       </div>
-
       <div class="ai-panel">
-        <div class="ai-panel-header">
-          <div class="ai-dot"></div>
-          <span>Claude · Finansal Asistan</span>
-        </div>
+        <div class="ai-panel-header"><div class="ai-dot"></div><span>Claude · Finansal Asistan</span></div>
         <div class="ai-output" id="ai-output">
-          <p class="ai-placeholder">Yapay zeka analizini başlatmak için aşağıdaki butona tıklayın.<br><br>Claude, seçili ayın tüm gelir ve giderlerini inceleyerek size kişiselleştirilmiş öneriler sunacak.</p>
+          <p class="ai-placeholder">Yapay zeka analizini başlatmak için aşağıdaki butona tıklayın.</p>
         </div>
         <div class="ai-actions">
-          <button class="ai-btn" onclick="yapaYZAnaliz()">
-            <span id="ai-btn-text">✦ Analiz Başlat</span>
-          </button>
+          <button class="ai-btn" onclick="yapaYZAnaliz()"><span id="ai-btn-text">✦ Analiz Başlat</span></button>
           <button class="ai-btn ai-btn-sec" onclick="yapaYZSoru()">Soru Sor</button>
         </div>
         <div class="ai-question-wrap" id="ai-q-wrap" style="display:none">
@@ -233,31 +251,19 @@
       </div>
     </section>
 
-    <!-- AYARLAR -->
+    <!-- ════════ AYARLAR ════════ -->
     <section class="page" id="page-ayarlar">
-      <div class="page-header">
-        <h1 class="page-title">Ayarlar</h1>
-      </div>
-
+      <div class="page-header"><h1 class="page-title">Ayarlar</h1></div>
       <div class="settings-card">
         <div class="settings-title">Claude API Anahtarı</div>
-        <p class="settings-desc">YZ Analiz özelliğini kullanmak için bir Anthropic API anahtarı gereklidir. Ücretsiz edinmek için <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> adresine gidin.</p>
+        <p class="settings-desc">YZ Analiz için gerekli. Ücretsiz edinmek: <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a></p>
         <div class="form-group">
           <label>API Anahtarı</label>
           <input id="api-key-input" type="password" placeholder="sk-ant-...">
         </div>
         <button class="submit-btn" onclick="saveApiKey()">Kaydet</button>
-        <div class="success-msg" id="api-success">✓ API anahtarı kaydedildi</div>
+        <div class="success-msg" id="api-success">✓ Kaydedildi</div>
       </div>
-
-      <div class="settings-card">
-        <div class="settings-title">Bütçe Limitleri</div>
-        <p class="settings-desc">Aylık harcama limitlerini belirleyin.</p>
-        <div id="budget-inputs"></div>
-        <button class="submit-btn" onclick="saveBudgets()">Limitleri Kaydet</button>
-        <div class="success-msg" id="budget-success">✓ Kaydedildi</div>
-      </div>
-
       <div class="settings-card danger-card">
         <div class="settings-title">Veri Yönetimi</div>
         <div class="danger-btns">
@@ -272,7 +278,6 @@
 </div>
 
 <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
-
 <script src="app.js"></script>
 </body>
 </html>
